@@ -53,9 +53,28 @@ speed to market.
 It runs right away in local mode for testing. For real sharing across people,
 connect Supabase below and redeploy.
 
-## Connect Supabase
+## Connect Supabase (terminal — recommended)
 
-You already have an account, so this is quick.
+Shared links need Supabase so responses save for everyone. One script does it all.
+
+1. Open **Terminal** on your Mac.
+2. Run:
+
+```bash
+cd ~/Sites/greenlight
+supabase login          # opens browser, one-time auth
+./scripts/setup-supabase.sh
+```
+
+The script will:
+- Create a Supabase project named `greenlight` (or reuse if it exists)
+- Apply [`supabase-schema.sql`](supabase-schema.sql) (tables + Flick seed)
+- Write [`config.js`](config.js) with your URL and anon key
+- Add env vars to Vercel and redeploy
+
+When it finishes, the bottom-right tag on the live site shows **● shared (Supabase)** instead of local mode.
+
+### Manual setup (alternative)
 
 1. Create a new project in Supabase (free tier is fine).
 2. Open SQL Editor, New query, paste all of supabase-schema.sql, and Run. This
@@ -64,12 +83,12 @@ You already have an account, so this is quick.
    near the bottom of the SQL so the project shows up under your account.
 3. Project Settings, then API. Copy the Project URL and the anon public key
    (labeled anon, never the service_role key).
-4. Open config.js and paste both values:
+4. Add to Vercel → Project → Settings → Environment Variables:
 
-       SUPABASE_URL: "https://yourproject.supabase.co",
-       SUPABASE_ANON_KEY: "your anon key",
+       SUPABASE_URL=https://yourproject.supabase.co
+       SUPABASE_ANON_KEY=your anon key
 
-5. Redeploy to Vercel.
+   Or paste both values in config.js for local testing, then redeploy.
 
 The tag in the bottom right corner shows a hollow circle for local mode and a
 filled circle once Supabase is connected.

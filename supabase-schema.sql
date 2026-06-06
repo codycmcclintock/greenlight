@@ -35,6 +35,13 @@ alter table public.pb_responses enable row level security;
 -- Policies. Share by link with no real login yet, so the public anon key
 -- needs read and write. Fine for early client polling. Do not store anything
 -- sensitive. Tighten this once you add Supabase Auth (Google SSO).
+drop policy if exists "anon read projects"    on public.pb_projects;
+drop policy if exists "anon insert projects"  on public.pb_projects;
+drop policy if exists "anon update projects"  on public.pb_projects;
+drop policy if exists "anon read responses"   on public.pb_responses;
+drop policy if exists "anon insert responses" on public.pb_responses;
+drop policy if exists "anon update responses" on public.pb_responses;
+
 create policy "anon read projects"    on public.pb_projects  for select to anon using (true);
 create policy "anon insert projects"  on public.pb_projects  for insert to anon with check (true);
 create policy "anon update projects"  on public.pb_projects  for update to anon using (true) with check (true);
