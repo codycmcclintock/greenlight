@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 240" width="760" height="240" role="img" aria-label="Greenlight">
+  <defs>
+    <style>@import url('https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&amp;display=swap');</style>
+    <linearGradient id="coreL" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#34D778"/>
+      <stop offset="1" stop-color="#0FA351"/>
+    </linearGradient>
+    <filter id="softL" x="-90%" y="-90%" width="280%" height="280%">
+      <feGaussianBlur stdDeviation="15"/>
+    </filter>
+  </defs>
+
+  <rect x="2" y="2" width="756" height="236" rx="28" fill="#F4F3EE" stroke="#E3E1D8" stroke-width="1.5"/>
+
+  <g transform="translate(60,40) scale(0.8)">
+    <circle cx="100" cy="100" r="40" fill="#1FBF63" opacity="0.22" filter="url(#softL)"/>
+    <circle cx="100" cy="100" r="62" fill="none" stroke="#14201A" stroke-width="7"/>
+    <circle cx="100" cy="100" r="50" fill="none" stroke="#14201A" stroke-width="2" opacity="0.18"/>
+    <circle cx="100" cy="100" r="30" fill="url(#coreL)"/>
+    <ellipse cx="90" cy="88" rx="13" ry="9" fill="#FFFFFF" opacity="0.45"/>
+  </g>
+
+  <text x="280" y="130" font-family="Sora, 'Hanken Grotesk', system-ui, sans-serif" font-size="70" font-weight="600" letter-spacing="-1.5" fill="#14201A">Greenlight</text>
+  <text x="283" y="170" font-family="Sora, 'Hanken Grotesk', system-ui, sans-serif" font-size="14.5" font-weight="500" letter-spacing="4.5" fill="#5C6E64">ALIGN BEFORE YOU BUILD</text>
+</svg>
