@@ -90,7 +90,7 @@ textarea{resize:vertical;min-height:150px;font-size:13.5px;line-height:1.55;}
 .cat-h .c{font-size:12px;color:var(--grey);}
 .feat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:13px 14px;margin-bottom:8px;}
 .feat-main{display:flex;align-items:center;gap:10px;}
-.info-btn{flex-shrink:0;width:24px;height:24px;border-radius:50%;border:1px solid var(--line);background:var(--panel2);color:var(--muted);font-family:'Fraunces',serif;font-style:italic;font-weight:700;font-size:12px;cursor:pointer;transition:.13s;}
+.info-btn{flex-shrink:0;width:24px;height:24px;border-radius:50%;border:1px solid var(--line);background:var(--panel2);color:var(--muted);font-family:'Fraunces',serif;font-style:italic;font-weight:700;font-size:11px;line-height:1;display:inline-flex;align-items:center;justify-content:center;padding:0;cursor:pointer;transition:.13s;user-select:none;}
 .info-btn:hover,.info-btn.open{border-color:var(--green);color:var(--green-soft);}
 .seg{display:flex;gap:5px;flex-shrink:0;}
 .seg button{cursor:pointer;border:1px solid var(--line);background:var(--panel2);color:var(--muted);border-radius:8px;font:inherit;font-weight:600;font-size:12px;padding:7px 10px;transition:.12s;min-width:46px;}
