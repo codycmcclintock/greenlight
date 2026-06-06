@@ -12,10 +12,10 @@ is the starting position, not the final word.
 ## The wedge
 
 Win with one thing done beautifully: a fast, full screen, swipe to next feed
-that makes the filmmaker content effortless to watch in the browser — on mobile
-web and desktop. Everything in the MVP exists to support that core loop. Depth
-such as deeper discovery, creator tools, and richer monetization gets layered on
-once people are hooked.
+that makes filmmaker content effortless to watch on native iOS and Android.
+Everything in the MVP exists to support that core loop. Depth such as deeper
+discovery, creator tools, and richer monetization gets layered on once people
+are hooked.
 
 ---
 

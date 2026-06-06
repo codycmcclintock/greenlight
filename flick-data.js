@@ -1,9 +1,9 @@
 /* Flick sample project — keep in sync with flick-mvp-spec.md and supabase-schema.sql */
 const FLICK_DATA = {
   meta: {
-    wedge: 'Win with one thing done beautifully: a fast, full screen, swipe to next feed that makes the filmmaker content effortless to watch in the browser. Everything in the MVP exists to support that core loop.',
-    howTo: 'Each feature starts tagged from our written scope. Change anything that does not match your view. The results page shows where the team lands so we can lock the real MVP with confidence.',
-    productType: 'web app'
+    wedge: 'We\'re building Flick — a premium home for vertical film. Win with one thing done beautifully: a fast, full-screen, swipe-to-next feed that makes filmmaker work effortless to watch. Everything in the MVP below exists to support that core loop.',
+    howTo: 'Founding team — each feature starts with our proposed MVP, Soon, or Later tag. Change anything that doesn\'t match your view, answer the two calls at the top, and add notes if we missed something. This is our starting position, not the final word. We\'ll lock the real MVP from where we land together.',
+    productType: 'Native iOS & Android'
   },
   cats: [
     { name: 'Core Player and Feed', items: [

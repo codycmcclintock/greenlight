@@ -36,8 +36,8 @@ function initFeatureDefaults(cats, features){
 function scopeBlock(meta){
   if(!meta||(!meta.wedge&&!meta.howTo)) return '';
   return `<div class="scope-block">
-    <button type="button" class="scope-toggle" id="scopeToggle">Starting scope <span class="scope-chevron">&#9662;</span></button>
-    <div class="scope-body hidden" id="scopeBody">
+    <button type="button" class="scope-toggle open" id="scopeToggle">Starting scope <span class="scope-chevron">&#9662;</span></button>
+    <div class="scope-body" id="scopeBody">
       ${meta.wedge?`<p class="scope-wedge">${esc(meta.wedge)}</p>`:''}
       ${meta.howTo?`<p class="scope-how">${esc(meta.howTo)}</p>`:''}
       ${meta.productType?`<p class="scope-type">Product type: ${esc(meta.productType)}</p>`:''}
