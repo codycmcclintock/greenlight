@@ -91,7 +91,7 @@ const FLICK_DATA = {
     ]}
   ],
   decisions: [
-    { id: 'd_experience', q: 'Which experience do we optimize for at launch?', options: ['Desktop web first', 'Mobile web first', 'Both from day one'] },
+    { id: 'd_experience', q: 'Which platform do we launch on?', options: ['Native iOS', 'Native Android', 'Both'] },
     { id: 'd_admin', q: 'Admin or content tool for launch?', options: ['Full tool at launch', 'Scaled down and scrappy', 'Later, keep it manual for now'] }
   ]
 };

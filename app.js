@@ -311,7 +311,7 @@ Vertical fullscreen player | The main viewing surface">${esc(s.features)}</texta
     <div class="row" style="margin-top:10px"><button class="btn btn-ghost" id="sample">Load the Flick sample</button><span class="note" style="margin:0">The Info column powers the circled i next to a feature.</span></div>
     <label>Key decisions (optional)</label>
     <textarea id="decisions" placeholder="One per line. Options after the question mark, split by a slash.
-Which experience do we optimize for at launch? Desktop web first / Mobile web first / Both from day one" style="min-height:110px">${esc(s.decisions)}</textarea>
+Which platform do we launch on? Native iOS / Native Android / Both" style="min-height:110px">${esc(s.decisions)}</textarea>
     <div class="row" style="margin-top:22px"><button class="btn btn-green" id="prev">Preview</button><button class="btn btn-ghost" id="create" style="${s.preview?'':'display:none'}">Create shareable list</button></div>
     <div id="pa"></div>
   </div>`;
@@ -487,7 +487,7 @@ Subscriptions and Monetization,Stripe subscription checkout,Web checkout for pai
 Subscriptions and Monetization,Paywall or subscription gate,,mvp
 Notifications and Retention,Web push notifications,Browser push for new content.,soon
 Offline and Extras,Offline downloads,Save titles to watch without a connection.,later`;
-const SAMPLE_DECISIONS = `Which experience do we optimize for at launch? Desktop web first / Mobile web first / Both from day one
+const SAMPLE_DECISIONS = `Which platform do we launch on? Native iOS / Native Android / Both
 Admin or content tool for launch? Full tool at launch / Scaled down and scrappy / Later, keep it manual for now`;
 
 /* ---------------- boot ---------------- */

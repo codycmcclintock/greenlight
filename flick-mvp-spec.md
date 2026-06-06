@@ -110,7 +110,7 @@ first release so we can ship faster and learn.
 These two calls drive the whole timeline. The Greenlight link asks each person
 to weigh in.
 
-1. Which experience do we optimize for at launch? Desktop web first, mobile web first, or both from day one.
+1. Which platform do we launch on? Native iOS, Native Android, or both.
 2. Admin or content tool for launch? Full tool, scaled down, or manual for now.
 
 ---
