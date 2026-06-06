@@ -459,7 +459,7 @@ async function fillView(id){
   }
   function thanks(){
     root.innerHTML=`<div class="wrap">${topbar(false)}<div class="ok"><div class="markwrap" style="width:64px;margin:0 auto 18px">${MARK}</div>
-      <h2>Thank you</h2><p>Your thoughts are in for ${esc(project.title)}. The team will use this to lock what we build first. You can close this tab.</p>
+      <h2>Thank you</h2><p>Your thoughts are in for ${esc(project.title)}. I will use this to help determine what we lock in and propose the best next steps. You can close this tab.</p>
       <p class="note" style="margin-top:14px">Come back with the same email (${esc(resp.email)}) any time to update your answers.</p>
       <div class="row" style="justify-content:center;margin-top:22px"><button class="btn btn-ghost" id="edit">Edit my answers</button></div></div></div>`;
     root.querySelector('#edit').onclick=()=>{ loadedFromPrevious=true; defaultsApplied=true; form(); };
