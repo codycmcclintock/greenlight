@@ -154,15 +154,31 @@ async function createProject(obj){
     localStorage.setItem('gl_proj:'+obj.id, JSON.stringify(obj));
   }
 }
+function emailKey(email){ return slug(String(email||'').trim()); }
+
+async function getResponse(projectId, email){
+  const key=emailKey(email);
+  if (sb){
+    const { data, error } = await sb.from('pb_responses').select('*')
+      .eq('project_id', projectId).eq('email_key', key).maybeSingle();
+    if (error){ console.error(error); return null; }
+    if (!data) return null;
+    return { email:data.email, decisions:data.decisions||{}, features:data.features||{}, notes:data.notes||'' };
+  }
+  try{
+    const v=localStorage.getItem('gl_resp:'+projectId+':'+key);
+    return v?JSON.parse(v):null;
+  }catch(e){ return null; }
+}
 async function saveResponse(projectId, r){
   if (sb){
     const { error } = await sb.from('pb_responses').upsert({
-      project_id:projectId, email_key:slug(r.email), email:r.email,
+      project_id:projectId, email_key:emailKey(r.email), email:r.email.trim(),
       decisions:r.decisions, features:r.features, notes:r.notes||'', updated_at:new Date().toISOString()
     }, { onConflict:'project_id,email_key' });
     if (error){ console.error(error); throw error; }
   } else {
-    localStorage.setItem('gl_resp:'+projectId+':'+slug(r.email), JSON.stringify(r));
+    localStorage.setItem('gl_resp:'+projectId+':'+emailKey(r.email), JSON.stringify(r));
   }
 }
 async function getResponses(projectId){
@@ -357,38 +373,62 @@ async function fillView(id){
   const total=cats.reduce((a,c)=>a+c.items.length,0);
   const resp={ email:'', decisions:{}, features:{}, notes:'' };
   let defaultsApplied=false;
+  let loadedFromPrevious=false;
+  const sessionEmailKey='gl_last_email:'+id;
+
+  async function loadPrevious(email){
+    const prev=await getResponse(id, email);
+    if(!prev) return false;
+    resp.decisions={...(prev.decisions||{})};
+    resp.features={...(prev.features||{})};
+    resp.notes=prev.notes||'';
+    loadedFromPrevious=true;
+    return true;
+  }
 
   function emailStep(){
+    const savedEmail=sessionStorage.getItem(sessionEmailKey)||'';
     root.innerHTML=`<div class="wrap">${topbar(false)}
       <header><div class="kicker">${esc(project.title)}</div><h1>Help shape <em>what we build</em></h1>
-      <p class="sub">You will tag each feature as must have for launch, soon after, or later. It takes about five minutes. First, your email so we know whose input this is.</p></header>
+      <p class="sub">Enter your email to start or pick up where you left off. Same email loads your previous answers so you can update them.</p></header>
       ${scopeBlock(meta)}
       <div class="center-card" style="margin-top:30px">
         <label style="margin-top:0">Your email</label>
-        <input id="em" type="email" placeholder="you@email.com" />
+        <input id="em" type="email" placeholder="you@email.com" value="${esc(savedEmail)}" />
         <button class="btn btn-green btn-block" id="next" style="margin-top:18px">Continue</button>
         <div class="err" id="er"></div>
+        ${savedEmail?'<p class="note" style="margin-top:12px;text-align:center">We remember this email from your last visit on this device.</p>':''}
       </div></div>`;
     bindScopeToggle();
-    const em=root.querySelector('#em'),er=root.querySelector('#er');
+    const em=root.querySelector('#em'),er=root.querySelector('#er'),btn=root.querySelector('#next');
     const next=async()=>{
       const v=em.value.trim();
       if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)){ er.textContent='Please enter a valid email.'; return; }
+      er.textContent='';
+      btn.disabled=true; btn.textContent='Loading\u2026';
       resp.email=v;
-      const prev=(await getResponses(id)).find(r=>slug(r.email)===slug(v));
-      if(prev){ resp.decisions=prev.decisions||{}; resp.features=prev.features||{}; resp.notes=prev.notes||''; }
+      loadedFromPrevious=false;
+      await loadPrevious(v);
+      sessionStorage.setItem(sessionEmailKey, v);
+      defaultsApplied=false;
       form();
     };
-    root.querySelector('#next').onclick=next; em.addEventListener('keydown',e=>{ if(e.key==='Enter') next(); }); em.focus();
+    btn.onclick=next;
+    em.addEventListener('keydown',e=>{ if(e.key==='Enter') next(); });
+    em.focus();
   }
 
   function form(){
-    if(!defaultsApplied){ initFeatureDefaults(cats, resp.features); defaultsApplied=true; }
+    if(!defaultsApplied){
+      if(!loadedFromPrevious) initFeatureDefaults(cats, resp.features);
+      defaultsApplied=true;
+    }
     const rated=Object.keys(resp.features).length; const pct=Math.round(rated/total*100);
     root.innerHTML=`<div class="wrap">${topbar(false)}
       <header><div class="kicker">${esc(project.title)}</div><h1>What matters <em>most</em>?</h1>
       <p class="sub">Features start from our written scope. Change anything that does not match your view. Tap the circled i for detail.</p></header>
       ${scopeBlock(meta)}
+      ${loadedFromPrevious?'<div class="return-banner">Welcome back — your previous answers are loaded. Change anything and submit again to update.</div>':''}
       <div class="progress" style="margin-top:16px"><div class="bar"><span style="width:${pct}%"></span></div><div class="pct">${rated} of ${total} rated</div></div>
       ${decisions.length?`<div class="deck"><h3>Key decisions</h3>${decisions.map(d=>`<div class="q"><div class="ql">${esc(d.q)}</div><div class="opts" data-d="${d.id}">${d.options.map(o=>`<button class="opt ${resp.decisions[d.id]===o?'sel':''}" data-o="${esc(o)}">${esc(o)}</button>`).join('')}</div></div>`).join('')}</div>`:''}
       ${cats.map(c=>{ const catRated=c.items.filter(it=>resp.features[it.id]).length;
@@ -415,12 +455,14 @@ async function fillView(id){
     const clean={ email:resp.email, notes:(root.querySelector('#notes')?root.querySelector('#notes').value:resp.notes)||'',
       decisions:Object.fromEntries(Object.entries(resp.decisions).filter(([k,v])=>v!=null)), features:resp.features };
     resp.notes=clean.notes;
-    try{ await saveResponse(id, clean); thanks(); }catch(e){ toast('Could not submit. Try again.'); }
+    try{ await saveResponse(id, clean); sessionStorage.setItem(sessionEmailKey, resp.email); thanks(); }catch(e){ toast('Could not submit. Try again.'); }
   }
   function thanks(){
     root.innerHTML=`<div class="wrap">${topbar(false)}<div class="ok"><div class="markwrap" style="width:64px;margin:0 auto 18px">${MARK}</div>
       <h2>Thank you</h2><p>Your thoughts are in for ${esc(project.title)}. The team will use this to lock what we build first. You can close this tab.</p>
-      <div class="row" style="justify-content:center;margin-top:22px"><button class="btn btn-ghost" onclick="location.reload()">Edit my answers</button></div></div></div>`;
+      <p class="note" style="margin-top:14px">Come back with the same email (${esc(resp.email)}) any time to update your answers.</p>
+      <div class="row" style="justify-content:center;margin-top:22px"><button class="btn btn-ghost" id="edit">Edit my answers</button></div></div></div>`;
+    root.querySelector('#edit').onclick=()=>{ loadedFromPrevious=true; defaultsApplied=true; form(); };
   }
   emailStep();
 }
